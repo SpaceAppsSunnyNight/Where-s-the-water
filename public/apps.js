@@ -4,6 +4,15 @@ var w ,h;
 var max_depth ,min_specific ,max_degC;
 
 window.onload = function(){
+	var p = document.createElement("div"); 
+	var newContent = document.createTextNode("紅:深度 ,綠:溫度, 藍:wat unf"); 
+	p.appendChild(newContent);
+	var currentDiv = document.getElementById("div1"); 
+	document.body.insertBefore(p, currentDiv); 
+
+	// var p = document.createElement("p");
+	// p.class = "lead"; 
+	// document.getElementById("px").insertBefore(p ,document.createTextNode("紅:深度 ,綠:溫度, 藍:"));
 	document.getElementById("search").onclick = request;
 }
 
@@ -30,6 +39,7 @@ function draw(){
 			// max_degC = database[n].degC;
 	}
     for(var i=0;i<database.length;i++){
+		// line(0 ,i*h ,width, i*h);
 		fill(255 , 0, 0);
 		rect(0 ,i*h ,database[i].depth*width/20 ,h/5);
 		fill(100 , 200, 0);
@@ -40,6 +50,7 @@ function draw(){
 		// rect(0 ,i*h+h/5*3 ,(database[i].specific-600)*5 ,h/5);
 		// fill(200 , 200, 0);
 		// rect(0 ,i*h+h/5*4 ,(database[i].specific-600)*5 ,h/5);
+		line(0 ,i*h-h/5 ,width, i*h-h/5);
 		fill(0,100,200);
 		text(database[i].date ,width-textWidth(database[i].date) ,height/database.length*(i+1)-height/database.length/3);
     }
