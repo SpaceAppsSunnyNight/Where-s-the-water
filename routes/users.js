@@ -13,7 +13,7 @@ router.get('/', function(req, res, next) {
 		var d = req.query.begin_date.split("-");
 
 		request(options ,function(err ,r ,data){
-			if(err||!data)return res.sned("con not connect server");
+			if(err||!data)return res.send("con not connect server");
 			var $ = cheerio.load(data);
 			var table = $("table[class]").eq($("table[class]").length-1).find("td");
 			var db = [];
