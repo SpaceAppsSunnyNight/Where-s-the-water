@@ -1,6 +1,7 @@
 var database = [];
 var canvas;
 var w ,h;
+var max_depth ,min_specific ,max_degC;
 
 window.onload = function(){
 	document.getElementById("search").onclick = request;
@@ -20,22 +21,21 @@ function setup(){
 }
 //specific 導電
 function draw(){
-	var max_depth=0 ,min_specific=database[0].specific ,max_degC=0;
-	for(var i=0;i<database.length;i++){
-		if(database[i].depth>max_depth)
-			max_depth = database[i].depth;
-		if(database[i].specific<min_specific)
-			max_specific = database[i].min_specific;
-		if(database[i].degC>max_degC)
-			max_degC = database[i].degC;
+	for(var n=0;n<database.length;n++){
+		// if(database[n].depth>max_depth)
+			// max_depth = database[n].depth;
+		if(database[n].specific<min_specific)
+			max_specific = database[n].min_specific;
+		// if(database[n].degC>max_degC)
+			// max_degC = database[n].degC;
 	}
     for(var i=0;i<database.length;i++){
 		fill(255 , 0, 0);
-		rect(0 ,i*h ,database[i].depth*20 ,h/5);
-		fill(200 , 200, 0);
-		rect(0 ,i*h+h/5*.75 ,(database[i].degC)*20 ,h/5);
+		rect(0 ,i*h ,database[i].depth*width/20 ,h/5);
+		fill(100 , 200, 0);
+		rect(0 ,i*h+h/5*1.5 ,(database[i].degC)*width/20 ,h/5);
 		fill(0 , 200, 200);
-		rect(0 ,i*h+h/5*1.5 ,(database[i].specific-650)*20 ,h/5);
+		rect(0 ,i*h+h/5*3 ,(database[i].specific-min_specific+5)*width/10 ,h/5);
 		fill(0 , 200, 200);
 		// rect(0 ,i*h+h/5*3 ,(database[i].specific-600)*5 ,h/5);
 		// fill(200 , 200, 0);
@@ -69,7 +69,11 @@ function request(){
 			database = JSON.parse(xhr.responseText);
 			w = width/database.length;
 			resizeCanvas(window.innerWidth*.8 ,database.length*h);
-			document.getElementById("prompt").innerHTML = '';
+			max_depth=0 ,min_specific = database[0].specific ,max_degC=0;
+			if(database.length===0)
+				document.getElementById("prompt").innerHTML = 'data not found';
+			else
+				document.getElementById("prompt").innerHTML = "";
 			draw();
 		}
 	};
