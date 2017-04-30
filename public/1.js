@@ -1,7 +1,7 @@
 var database = [];
 var canvas;
 var w ,h;
-var max_depth ,min_specific ,max_degC;
+var max_depth ,min_specific ,min_degC;
 
 window.onload = function(){
 	document.getElementById("search").onclick = request;
@@ -30,11 +30,13 @@ function draw(){
 			// max_depth = database[n].depth;
 		if(database[n].specific<min_specific)
 			max_specific = database[n].min_specific;
-		// if(database[n].degC>max_degC)
-			// max_degC = database[n].degC;
+		if(database[n].degC>min_degC)
+			min_degC = database[n].degC;
 	}
     for(var i=0;i<database.length-1;i++){
-		fill(255);
+		// fill(255);
+		console.log("db", database[i].degC, min_degC ,(database[i].degC - min_degC+1)*100);
+		fill(0,0,(database[i].degC-min_degC+5)*30);
 		quad(
 			w*i+w/2, (database[i].specific-min_specific+1)*100,
 			w*(i+1)+w/2, (database[i+1].specific-min_specific+1)*100,
@@ -58,17 +60,22 @@ function request(){
 	var xhr = new XMLHttpRequest();
 	xhr.onreadystatechange = function(){
 		if(this.readyState == 4 && this.status == 200){
-			database = JSON.parse(xhr.responseText);
+			console.log(this.responseText)
+			if(xhr.responseText === "con not connect server")
+				draw_error();
+			else
+				database = JSON.parse(xhr.responseText);
 			w = width/database.length;
 			resizeCanvas(window.innerWidth*.8 ,database.length*h);
-			max_depth=0 ,min_specific = database[0].specific ,max_degC=0;
+			if(database.length>0){
+				max_depth=0 ,min_specific = database[0].specific ,min_degC=database[0].degC;
+			}
 			if(database.length===0)
 				document.getElementById("prompt").innerHTML = 'data not found';
 			else
 				document.getElementById("prompt").innerHTML = "";
 			draw();
-		}else
-			draw_error();
+		}
 	};
 	xhr.open("GET", "http://localhost:3000/data?begin_date="+start+"&end_date="+end, true);
 	xhr.send();

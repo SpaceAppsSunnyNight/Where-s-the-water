@@ -5,6 +5,7 @@ var max_depth ,min_specific ,max_degC;
 
 window.onload = function(){
 	var p = document.createElement("div"); 
+	p.id = "qwq";
 	var newContent = document.createTextNode("紅:深度 ,綠:溫度, 藍:wat unf"); 
 	p.appendChild(newContent);
 	var currentDiv = document.getElementById("div1"); 
